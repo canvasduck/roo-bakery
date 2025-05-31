@@ -188,7 +188,7 @@ Groups are defined in the YAML document with the following structure:
   modes: Mode1, Mode2, Mode3
 ```
 
-The `modes` property can be a comma-separated string or an array of mode names. Groups can include other groups, allowing for nested grouping.
+The `modes` property can be a comma-separated string or an array of mode names. 
 
 ### Using Groups
 
@@ -199,27 +199,8 @@ When adding or removing objects, you can specify a group name instead of individ
 roo-bake add my-group
 
 # Remove all modes in a group
-roo-bake remove my-group --main /path/to/main.yaml
+roo-bake remove my-group
 ```
-
-Note that when removing groups, the `--main` option is required to properly resolve the group's modes.
-
-### Nested Groups
-
-Groups can include other groups, allowing for hierarchical organization:
-
-```yaml
-- name: basic-modes
-  modes: Mode1, Mode2
-
-- name: advanced-modes
-  modes: Mode3, Mode4
-
-- name: all-modes
-  modes: basic-modes, advanced-modes, Mode5
-```
-
-When using a nested group, the tool will recursively resolve all included groups and their modes.
 
 ## Configuration Storage
 
