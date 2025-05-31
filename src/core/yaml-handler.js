@@ -36,7 +36,7 @@ function writeYamlFile(filePath, data) {
     // Ensure the directory exists
     fs.ensureDirSync(path.dirname(filePath));
 
-    // Convert data to YAML and write to file
+    // Convert data to YAML
     const yamlContent = yaml.dump(data, {
       indent: 2,
       lineWidth: -1, // Don't wrap lines
@@ -44,7 +44,24 @@ function writeYamlFile(filePath, data) {
       sortKeys: false // Preserve key order
     });
 
-    fs.writeFileSync(filePath, yamlContent, 'utf8');
+    // Check if this is an active document (based on filename)
+    const isActiveDocument = path.basename(filePath).includes('active');
+    
+    // For active documents, wrap the content in a customModes property
+    let finalContent = yamlContent;
+    if (isActiveDocument) {
+      if (Array.isArray(data)) {
+        if (data.length === 0) {
+          // Handle empty array case
+          finalContent = 'customModes: []';
+        } else {
+          // Handle non-empty array case
+          finalContent = 'customModes:\n' + yamlContent;
+        }
+      }
+    }
+
+    fs.writeFileSync(filePath, finalContent, 'utf8');
     return true;
   } catch (err) {
     error(`Error writing YAML file: ${err.message}`);

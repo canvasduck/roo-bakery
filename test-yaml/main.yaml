@@ -1,33 +1,33 @@
-- slug: item1
-  name: Item 1
+- name: Item 1
+  id: item1
   description: This is the first test item
   tags:
     - test
     - sample
 
-- slug: item2
-  name: Item 2
+- name: Item 2
+  id: item2
   description: This is the second test item
   tags:
     - test
     - example
 
-- slug: item3
-  name: Item 3
+- name: Item 3
+  id: item3
   description: This is the third test item
   tags:
     - test
     - demo
 
-- slug: item4
-  name: Item 4
+- name: Item 4
+  id: item4
   description: This is the fourth test item
   tags:
     - test
     - sample
 
-- slug: item5
-  name: Item 5
+- name: Item 5
+  id: item5
   description: This is the fifth test item
   tags:
     - test

@@ -12,8 +12,8 @@ function register(program) {
   // Register the add command
   program
     .command('add')
-    .description('Add objects from main document to active document by slug')
-    .argument('<slugs...>', 'Slugs of objects to add (space-separated)')
+    .description('Add objects from main document to active document by name')
+    .argument('<names...>', 'Names of objects to add (space-separated)')
     .option('-m, --main <path>', 'Path to main document')
     .option('-a, --active <path>', 'Path to active document')
     .action(addCommand.execute);
@@ -21,8 +21,8 @@ function register(program) {
   // Register the remove command
   program
     .command('remove')
-    .description('Remove objects from active document by slug')
-    .argument('<slugs...>', 'Slugs of objects to remove (space-separated)')
+    .description('Remove objects from active document by name')
+    .argument('<names...>', 'Names of objects to remove (space-separated)')
     .option('-a, --active <path>', 'Path to active document')
     .action(removeCommand.execute);
 
@@ -37,7 +37,7 @@ function register(program) {
   program
     .command('remove-all-and-add')
     .description('Remove all objects from active document and add specified objects')
-    .argument('<slugs...>', 'Slugs of objects to add (space-separated)')
+    .argument('<names...>', 'Names of objects to add (space-separated)')
     .option('-m, --main <path>', 'Path to main document')
     .option('-a, --active <path>', 'Path to active document')
     .action(removeAllAddCommand.execute);

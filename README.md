@@ -1,6 +1,6 @@
 # Roo Bakery
 
-A CLI tool for managing YAML documents by selecting objects based on their 'slug' value.
+A CLI tool for managing YAML documents by selecting objects based on their 'name' value.
 
 ## Overview
 
@@ -11,7 +11,7 @@ Roo Bakery is a command-line tool that helps you manage YAML documents by allowi
 - Clear the active document
 - Replace all objects in the active document with a new selection
 
-The tool is designed to work with YAML documents that contain arrays of objects, where each object has a 'slug' property that uniquely identifies it.
+The tool is designed to work with YAML documents that contain arrays of objects, where each object has a 'name' property that uniquely identifies it.
 
 ## Installation
 
@@ -57,24 +57,24 @@ roo-bake config --reset
 
 ### Adding Objects
 
-Add objects from the main document to the active document by specifying their slugs:
+Add objects from the main document to the active document by specifying their names:
 
 ```bash
-roo-bake add slug1 slug2 slug3
+roo-bake add name1 name2 name3
 ```
 
 You can override the document paths for a single command:
 
 ```bash
-roo-bake add slug1 slug2 --main /path/to/main.yaml --active /path/to/active.yaml
+roo-bake add name1 name2 --main /path/to/main.yaml --active /path/to/active.yaml
 ```
 
 ### Removing Objects
 
-Remove objects from the active document by specifying their slugs:
+Remove objects from the active document by specifying their names:
 
 ```bash
-roo-bake remove slug1 slug2
+roo-bake remove name1 name2
 ```
 
 ### Removing All Objects
@@ -90,7 +90,7 @@ roo-bake remove-all
 Replace all objects in the active document with a new selection:
 
 ```bash
-roo-bake remove-all-and-add slug1 slug2 slug3
+roo-bake remove-all-and-add name1 name2 name3
 ```
 
 ## Examples
@@ -126,20 +126,20 @@ roo-bake remove-all-and-add object4 object5
 The tool expects YAML documents with the following structure:
 
 ```yaml
-- slug: object1
-  name: Object 1
+- name: object1
+  id: obj1
   description: This is object 1
   # ... other properties
 
-- slug: object2
-  name: Object 2
+- name: object2
+  id: obj2
   description: This is object 2
   # ... other properties
 
 # ... more objects
 ```
 
-Each object must have a unique 'slug' property that is used to identify and select it.
+Each object must have a unique 'name' property that is used to identify and select it.
 
 ## Configuration Storage
 

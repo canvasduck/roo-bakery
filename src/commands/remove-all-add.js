@@ -4,10 +4,10 @@ const output = require('../cli/output');
 
 /**
  * Execute the remove-all-and-add command
- * @param {string[]} slugs - Slugs of objects to add
+ * @param {string[]} names - Names of objects to add
  * @param {object} options - Command options
  */
-async function execute(slugs, options) {
+async function execute(names, options) {
   // Get document paths from options or config
   const mainPath = options.main || configManager.getMainDocumentPath();
   const activePath = options.active || configManager.getActiveDocumentPath();
@@ -24,7 +24,7 @@ async function execute(slugs, options) {
   }
 
   output.info(`Removing all objects from: ${activePath}`);
-  output.info(`Then adding objects with slugs: ${slugs.join(', ')}`);
+  output.info(`Then adding objects with names: ${names.join(', ')}`);
   output.info(`From: ${mainPath}`);
 
   // Step 1: Remove all objects from active document
@@ -38,10 +38,10 @@ async function execute(slugs, options) {
   output.success('Removed all objects from active document');
 
   // Step 2: Add specified objects to active document
-  const addSuccess = documentManager.addObjectsToActiveDocument(slugs, mainPath, activePath);
+  const addSuccess = documentManager.addObjectsToActiveDocument(names, mainPath, activePath);
 
   if (addSuccess) {
-    output.success(`Added ${slugs.length} object(s) to active document`);
+    output.success(`Added ${names.length} object(s) to active document`);
     
     // Show preview of active document
     const activeDoc = documentManager.getActiveDocument(activePath);

@@ -21,20 +21,20 @@ function validateFilePath(filePath) {
 }
 
 /**
- * Validate an array of slugs
- * @param {string[]} slugs - The slugs to validate
+ * Validate an array of names
+ * @param {string[]} names - The names to validate
  * @returns {boolean} True if valid, false otherwise
  */
-function validateSlugs(slugs) {
-  if (!slugs || !Array.isArray(slugs) || slugs.length === 0) {
-    error('At least one slug is required');
+function validateNames(names) {
+  if (!names || !Array.isArray(names) || names.length === 0) {
+    error('At least one name is required');
     return false;
   }
 
-  // Check if all slugs are valid strings
-  const invalidSlugs = slugs.filter(slug => !slug || typeof slug !== 'string');
-  if (invalidSlugs.length > 0) {
-    error('All slugs must be non-empty strings');
+  // Check if all names are valid strings
+  const invalidNames = names.filter(name => !name || typeof name !== 'string');
+  if (invalidNames.length > 0) {
+    error('All names must be non-empty strings');
     return false;
   }
 
@@ -57,10 +57,10 @@ function validateDocumentStructure(document) {
     return false;
   }
 
-  // Check if all items have a slug property
-  const invalidItems = document.filter(item => !item || typeof item !== 'object' || !item.slug);
+  // Check if all items have a name property
+  const invalidItems = document.filter(item => !item || typeof item !== 'object' || !item.name);
   if (invalidItems.length > 0) {
-    error('All document items must be objects with a slug property');
+    error('All document items must be objects with a name property');
     return false;
   }
 
@@ -69,6 +69,6 @@ function validateDocumentStructure(document) {
 
 module.exports = {
   validateFilePath,
-  validateSlugs,
+  validateNames,
   validateDocumentStructure
 };

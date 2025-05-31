@@ -32,7 +32,14 @@ function getActiveDocument(customPath) {
     return null;
   }
 
-  return yamlHandler.parseYamlFile(activeDocPath);
+  const parsedData = yamlHandler.parseYamlFile(activeDocPath);
+  
+  // Handle the case where the active document has a customModes property
+  if (parsedData && parsedData.customModes) {
+    return parsedData.customModes;
+  }
+  
+  return parsedData;
 }
 
 /**
@@ -53,35 +60,35 @@ function saveActiveDocument(document, customPath) {
 }
 
 /**
- * Find objects in a document by slug
+ * Find objects in a document by name
  * @param {object} document - The document to search
- * @param {string[]} slugs - Array of slugs to find
+ * @param {string[]} names - Array of names to find
  * @returns {object[]} Array of found objects
  */
-function findObjectsBySlug(document, slugs) {
+function findObjectsByName(document, names) {
   if (!document || !Array.isArray(document)) {
     return [];
   }
 
-  // Filter objects that have a matching slug
+  // Filter objects that have a matching name
   return document.filter(obj => {
-    if (!obj || typeof obj !== 'object' || !obj.slug) {
+    if (!obj || typeof obj !== 'object' || !obj.name) {
       return false;
     }
-    return slugs.includes(obj.slug);
+    return names.includes(obj.name);
   });
 }
 
 /**
  * Add objects to the active document
- * @param {string[]} slugs - Slugs of objects to add
+ * @param {string[]} names - Names of objects to add
  * @param {string} [mainPath] - Optional custom path to the main document
  * @param {string} [activePath] - Optional custom path to the active document
  * @returns {boolean} True if successful, false otherwise
  */
-function addObjectsToActiveDocument(slugs, mainPath, activePath) {
-  // Validate slugs
-  if (!validation.validateSlugs(slugs)) {
+function addObjectsToActiveDocument(names, mainPath, activePath) {
+  // Validate names
+  if (!validation.validateNames(names)) {
     return false;
   }
 
@@ -99,26 +106,26 @@ function addObjectsToActiveDocument(slugs, mainPath, activePath) {
   }
 
   // Find objects in main document
-  const objectsToAdd = findObjectsBySlug(mainDoc, slugs);
+  const objectsToAdd = findObjectsByName(mainDoc, names);
   
   if (objectsToAdd.length === 0) {
     warning('No matching objects found in the main document.');
     return false;
   }
 
-  if (objectsToAdd.length < slugs.length) {
-    const foundSlugs = objectsToAdd.map(obj => obj.slug);
-    const missingSlugs = slugs.filter(slug => !foundSlugs.includes(slug));
-    warning(`Some objects not found: ${missingSlugs.join(', ')}`);
+  if (objectsToAdd.length < names.length) {
+    const foundNames = objectsToAdd.map(obj => obj.name);
+    const missingNames = names.filter(name => !foundNames.includes(name));
+    warning(`Some objects not found: ${missingNames.join(', ')}`);
   }
 
   // Check for duplicates
-  const existingSlugs = activeDoc.map(obj => obj.slug);
-  const newObjects = objectsToAdd.filter(obj => !existingSlugs.includes(obj.slug));
-  const duplicates = objectsToAdd.filter(obj => existingSlugs.includes(obj.slug));
+  const existingNames = activeDoc.map(obj => obj.name);
+  const newObjects = objectsToAdd.filter(obj => !existingNames.includes(obj.name));
+  const duplicates = objectsToAdd.filter(obj => existingNames.includes(obj.name));
 
   if (duplicates.length > 0) {
-    warning(`Some objects already exist in active document: ${duplicates.map(obj => obj.slug).join(', ')}`);
+    warning(`Some objects already exist in active document: ${duplicates.map(obj => obj.name).join(', ')}`);
   }
 
   if (newObjects.length === 0) {
@@ -135,13 +142,13 @@ function addObjectsToActiveDocument(slugs, mainPath, activePath) {
 
 /**
  * Remove objects from the active document
- * @param {string[]} slugs - Slugs of objects to remove
+ * @param {string[]} names - Names of objects to remove
  * @param {string} [activePath] - Optional custom path to the active document
  * @returns {boolean} True if successful, false otherwise
  */
-function removeObjectsFromActiveDocument(slugs, activePath) {
-  // Validate slugs
-  if (!validation.validateSlugs(slugs)) {
+function removeObjectsFromActiveDocument(names, activePath) {
+  // Validate names
+  if (!validation.validateNames(names)) {
     return false;
   }
 
@@ -155,21 +162,21 @@ function removeObjectsFromActiveDocument(slugs, activePath) {
   }
 
   // Check if objects exist
-  const existingSlugs = activeDoc.map(obj => obj.slug);
-  const slugsToRemove = slugs.filter(slug => existingSlugs.includes(slug));
-  const nonExistentSlugs = slugs.filter(slug => !existingSlugs.includes(slug));
+  const existingNames = activeDoc.map(obj => obj.name);
+  const namesToRemove = names.filter(name => existingNames.includes(name));
+  const nonExistentNames = names.filter(name => !existingNames.includes(name));
 
-  if (slugsToRemove.length === 0) {
+  if (namesToRemove.length === 0) {
     warning('None of the specified objects exist in the active document.');
     return false;
   }
 
-  if (nonExistentSlugs.length > 0) {
-    warning(`Some objects not found in active document: ${nonExistentSlugs.join(', ')}`);
+  if (nonExistentNames.length > 0) {
+    warning(`Some objects not found in active document: ${nonExistentNames.join(', ')}`);
   }
 
   // Remove objects from active document
-  const updatedActiveDoc = activeDoc.filter(obj => !slugsToRemove.includes(obj.slug));
+  const updatedActiveDoc = activeDoc.filter(obj => !namesToRemove.includes(obj.name));
   
   // Save active document
   return saveActiveDocument(updatedActiveDoc, activePath);
@@ -197,7 +204,7 @@ module.exports = {
   getMainDocument,
   getActiveDocument,
   saveActiveDocument,
-  findObjectsBySlug,
+  findObjectsByName,
   addObjectsToActiveDocument,
   removeObjectsFromActiveDocument,
   removeAllObjectsFromActiveDocument

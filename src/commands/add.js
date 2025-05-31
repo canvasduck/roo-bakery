@@ -4,10 +4,10 @@ const output = require('../cli/output');
 
 /**
  * Execute the add command
- * @param {string[]} slugs - Slugs of objects to add
+ * @param {string[]} names - Names of objects to add
  * @param {object} options - Command options
  */
-async function execute(slugs, options) {
+async function execute(names, options) {
   // Get document paths from options or config
   const mainPath = options.main || configManager.getMainDocumentPath();
   const activePath = options.active || configManager.getActiveDocumentPath();
@@ -23,15 +23,15 @@ async function execute(slugs, options) {
     return;
   }
 
-  output.info(`Adding objects with slugs: ${slugs.join(', ')}`);
+  output.info(`Adding objects with names: ${names.join(', ')}`);
   output.info(`From: ${mainPath}`);
   output.info(`To: ${activePath}`);
 
   // Add objects to active document
-  const success = documentManager.addObjectsToActiveDocument(slugs, mainPath, activePath);
+  const success = documentManager.addObjectsToActiveDocument(names, mainPath, activePath);
 
   if (success) {
-    output.success(`Added ${slugs.length} object(s) to active document`);
+    output.success(`Added ${names.length} object(s) to active document`);
     
     // Show preview of active document
     const activeDoc = documentManager.getActiveDocument(activePath);

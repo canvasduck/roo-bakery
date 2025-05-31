@@ -4,10 +4,10 @@ const output = require('../cli/output');
 
 /**
  * Execute the remove command
- * @param {string[]} slugs - Slugs of objects to remove
+ * @param {string[]} names - Names of objects to remove
  * @param {object} options - Command options
  */
-async function execute(slugs, options) {
+async function execute(names, options) {
   // Get document path from options or config
   const activePath = options.active || configManager.getActiveDocumentPath();
 
@@ -17,14 +17,14 @@ async function execute(slugs, options) {
     return;
   }
 
-  output.info(`Removing objects with slugs: ${slugs.join(', ')}`);
+  output.info(`Removing objects with names: ${names.join(', ')}`);
   output.info(`From: ${activePath}`);
 
   // Remove objects from active document
-  const success = documentManager.removeObjectsFromActiveDocument(slugs, activePath);
+  const success = documentManager.removeObjectsFromActiveDocument(names, activePath);
 
   if (success) {
-    output.success(`Removed ${slugs.length} object(s) from active document`);
+    output.success(`Removed ${names.length} object(s) from active document`);
     
     // Show preview of active document
     const activeDoc = documentManager.getActiveDocument(activePath);
