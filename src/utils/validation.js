@@ -64,11 +64,87 @@ function validateDocumentStructure(document) {
     return false;
   }
 
+  // Validate group objects
+  const groups = document.filter(item => item && typeof item === 'object' && item.name && item.modes);
+  for (const group of groups) {
+    if (!validateGroupObject(group, document)) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+/**
+ * Validate a group object
+ * @param {object} group - The group object to validate
+ * @param {object} document - The full document (for circular reference detection)
+ * @param {Set} [visitedGroups] - Set of already visited groups (for circular reference detection)
+ * @returns {boolean} True if valid, false otherwise
+ */
+function validateGroupObject(group, document, visitedGroups = new Set()) {
+  // Check if group has a name property
+  if (!group.name || typeof group.name !== 'string') {
+    error('Group must have a valid name property');
+    return false;
+  }
+
+  // Check if group has a modes property
+  if (!group.modes) {
+    error(`Group '${group.name}' must have a modes property`);
+    return false;
+  }
+
+  // Parse modes into an array
+  let modeNames = [];
+  if (Array.isArray(group.modes)) {
+    modeNames = group.modes;
+  } else if (typeof group.modes === 'string') {
+    modeNames = group.modes.split(',').map(mode => mode.trim());
+  } else {
+    error(`Group '${group.name}' modes property must be a string or an array`);
+    return false;
+  }
+
+  // Check if modes is empty
+  if (modeNames.length === 0) {
+    error(`Group '${group.name}' must have at least one mode`);
+    return false;
+  }
+
+  // Check for circular references
+  if (visitedGroups.has(group.name)) {
+    error(`Circular reference detected in group: ${group.name}`);
+    return false;
+  }
+
+  // Mark this group as visited
+  visitedGroups.add(group.name);
+
+  // Check each mode in the group
+  for (const modeName of modeNames) {
+    // Find the mode in the document
+    const mode = document.find(item => item && item.name === modeName);
+    
+    // If mode is not found, it's not a circular reference
+    if (!mode) {
+      continue;
+    }
+    
+    // If mode is a group, recursively validate it
+    if (mode.modes) {
+      if (!validateGroupObject(mode, document, new Set(visitedGroups))) {
+        return false;
+      }
+    }
+  }
+
   return true;
 }
 
 module.exports = {
   validateFilePath,
   validateNames,
-  validateDocumentStructure
+  validateDocumentStructure,
+  validateGroupObject
 };

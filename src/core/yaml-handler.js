@@ -2,6 +2,7 @@ const yaml = require('js-yaml');
 const fs = require('fs-extra');
 const path = require('path');
 const { error } = require('../cli/output');
+const configManager = require('./config-manager');
 
 /**
  * Parse a YAML file
@@ -44,8 +45,9 @@ function writeYamlFile(filePath, data) {
       sortKeys: false // Preserve key order
     });
 
-    // Check if this is an active document (based on filename)
-    const isActiveDocument = path.basename(filePath).includes('active');
+    // Check if this is an active document by comparing with the configured active document path
+    const activeDocPath = configManager.getActiveDocumentPath();
+    const isActiveDocument = activeDocPath && path.resolve(filePath) === path.resolve(activeDocPath);
     
     // For active documents, wrap the content in a customModes property
     let finalContent = yamlContent;

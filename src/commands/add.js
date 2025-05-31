@@ -4,7 +4,12 @@ const output = require('../cli/output');
 
 /**
  * Execute the add command
- * @param {string[]} names - Names of objects to add
+ * This command adds objects from the main document to the active document.
+ * It supports both individual mode names and group names.
+ * When a group name is provided, all modes in that group (including nested groups)
+ * will be resolved and added.
+ *
+ * @param {string[]} names - Names of objects or groups to add
  * @param {object} options - Command options
  */
 async function execute(names, options) {

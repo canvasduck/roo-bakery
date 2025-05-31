@@ -55,7 +55,17 @@ function yamlPreview(title, data) {
     // For simplicity, just show the first few properties
     const preview = Object.entries(data)
       .slice(0, 5)
-      .map(([key, value]) => `  ${key}: ${typeof value === 'object' ? '[Object]' : value}`)
+      .map(([key, value]) => {
+        if (typeof value === 'object' && value !== null) {
+          // If the object has a name property, show it
+          if (value.name) {
+            return `  ${key}: ${value.name}`;
+          }
+          // Otherwise show a more detailed object representation
+          return `  ${key}: [Object: ${Object.keys(value).join(', ')}]`;
+        }
+        return `  ${key}: ${value}`;
+      })
       .join('\n');
     
     console.log(preview);
