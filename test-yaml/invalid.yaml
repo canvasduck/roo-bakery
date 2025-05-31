@@ -1,0 +1,7 @@
+This is not valid YAML:
+  - item1: {
+    name: "Missing closing brace"
+  - item2:
+    - nested:
+      - array
+    with invalid indentation

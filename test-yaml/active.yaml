@@ -1,0 +1,24 @@
+- slug: item2
+  name: Item 2
+  description: This is the second test item
+  tags:
+    - test
+    - example
+- slug: item4
+  name: Item 4
+  description: This is the fourth test item
+  tags:
+    - test
+    - sample
+- slug: item5
+  name: Item 5
+  description: This is the fifth test item
+  tags:
+    - test
+    - example
+- slug: item1
+  name: Item 1
+  description: This is the first test item
+  tags:
+    - test
+    - sample

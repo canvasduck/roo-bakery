@@ -1,0 +1,27 @@
+{
+  "name": "roo-bakery",
+  "version": "1.0.0",
+  "description": "CLI tool for editing YAML documents",
+  "main": "src/index.js",
+  "bin": {
+    "roo-bake": "./bin/roo-bake"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "cli",
+    "yaml",
+    "document",
+    "editor"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^11.0.0",
+    "js-yaml": "^4.1.0",
+    "conf": "^10.2.0",
+    "fs-extra": "^11.1.1",
+    "chalk": "^4.1.2"
+  }
+}
